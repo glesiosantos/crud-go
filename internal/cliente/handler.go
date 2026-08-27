@@ -15,6 +15,39 @@ func NewHandler(service *Service) *Handler {
 	}
 }
 
+func (h *Handler) AddCliente(
+	response http.ResponseWriter, 
+	request *http.Request){
+
+	var cliente Cliente
+
+	err := json.NewDecoder(request.Body).Decode(&cliente)
+
+	if err != nil {
+		http.Error(
+			response,
+			"JSON invalido",
+			http.StatusBadRequest,
+		)
+
+		return 
+	}
+
+	err = h.service.CadastrarCliente(cliente)
+
+	if err != nil {
+		http.Error(
+			response,
+			err.Error(),
+			http.StatusBadRequest,
+		)
+
+		return 
+	}
+
+	response.WriteHeader(http.StatusCreated)
+}
+
 func(h *Handler) ListarTodosClientes(
 	response http.ResponseWriter, 
 	request *http.Request){

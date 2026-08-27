@@ -27,7 +27,8 @@ func main() {
 
 	router := chi.NewRouter()
 
-	router.Get("/clientes", handler.ListarTodosClientes,)
+	router.Get("/clientes", handler.ListarTodosClientes,) 
+	router.Post("/clientes", handler.AddCliente,) 
 
 	log.Println(
         "Servidor executando em http://localhost:8081",
