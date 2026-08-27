@@ -11,7 +11,7 @@ type Repository struct {
 
 func NewRepository(db *pgxpool.Pool) *Repository {
 	return &Repository{
-		db: db
+		db: db,
 	}
 }
 
@@ -34,7 +34,7 @@ func (r Repository) RegistrarCliente(cliente Cliente) error {
 	return err
 }
 
-func (r Repository) CarregarTodosClientes(db *pgxpool.Pool) ([]Cliente, error){
+func (r Repository) CarregarTodosClientes() ([]Cliente, error){
 	sql := `
 		SELECT id, nome, email, telefone
 		FROM clientes
@@ -47,10 +47,10 @@ func (r Repository) CarregarTodosClientes(db *pgxpool.Pool) ([]Cliente, error){
 
 	defer linhas.Close()
 
-	clientes := []models.Cliente {}
+	clientes := []Cliente {}
 
 	for linhas.Next() {
-		var cliente models.Cliente
+		var cliente Cliente
 
 		err := linhas.Scan(
 			&cliente.Id,
@@ -71,7 +71,7 @@ func (r Repository) CarregarTodosClientes(db *pgxpool.Pool) ([]Cliente, error){
 
 func (r Repository) CarregarClientePeloId(idCliente int) (Cliente, error){
 	
-	var cliente models.Cliente
+	var cliente Cliente
 	
 	sql := `
 		SELECT id, nome, email, telefone

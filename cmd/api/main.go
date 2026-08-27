@@ -5,7 +5,8 @@ import (
 	"log"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/go-chi/chi/v5"
-	"crud-go/internal/clientes"
+	"crud-go/internal/cliente"
+	"net/http"
 )
 
 func main() {
@@ -20,23 +21,22 @@ func main() {
 	defer db.Close()
 
 	// Factory
-	repository := clientes.NewRepository(db)
-	service    := clientes.NewService(repository)
-	handler    := clientes.NewHandler(service)
+	repository := cliente.NewRepository(db)
+	service    := cliente.NewService(repository)
+	handler    := cliente.NewHandler(service)
 
 	router := chi.NewRouter()
 
-	router.Get("/clientes", handler.ListarTodosClientes)
+	router.Get("/clientes", handler.ListarTodosClientes,)
 
 	log.Println(
         "Servidor executando em http://localhost:8081",
     )
 
-	err := http.ListenAndServe(
+	err = http.ListenAndServe(
 		":8081",
-		router
+		router,
 	)
-
 
 	if err != nil {
 		log.Fatal(err)

@@ -9,15 +9,15 @@ type Handler struct {
 	service *Service
 }
 
-func NewHandler(service *Service) *Handle {
+func NewHandler(service *Service) *Handler {
 	return &Handler{
-		service: service
+		service: service,
 	}
 }
 
 func(h *Handler) ListarTodosClientes(
 	response http.ResponseWriter, 
-	request http.Request){
+	request *http.Request){
 
 	clientes, err := h.service.ListarClientes()	
 
@@ -33,7 +33,7 @@ func(h *Handler) ListarTodosClientes(
 
 	response.Header().Set(
 		"Content-Type",
-		"application/json"
+		"application/json",
 	)
 
 	json.NewEncoder(response).Encode(clientes)
