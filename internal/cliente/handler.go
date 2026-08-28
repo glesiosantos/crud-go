@@ -3,6 +3,8 @@ package cliente
 import(
 	"encoding/json"
     "net/http"
+	"strconv"
+	"github.com/go-chi/chi/v5"
 )
 
 type Handler struct {
@@ -70,4 +72,39 @@ func(h *Handler) ListarTodosClientes(
 	)
 
 	json.NewEncoder(response).Encode(clientes)
+}
+
+func(h *Handler) BuscarClientePorId (
+	response http.ResponseWriter, 
+	request *http.Request) {
+	
+	idTexto := 	chi.URLParam(request, "id")
+	id, err := strconv.Atoi(idTexto)
+	
+	if err != nil {
+		http.Error(
+			response,
+			"ID Invalido",
+			http.StatusBadRequest,
+		)
+	}
+
+	cliente, err := h.service.BuscarClientePorId(id)
+
+	if err != nil {
+		http.Error(
+			response,
+			"Cliente não encontrado",
+			http.StatusNotFound,
+		)
+	}
+
+	json.NewEncoder(response).Encode(cliente)
+}
+
+func(h *Handler) EditarCliente(
+	response http.ResponseWriter, 
+	request *http.Request
+) {
+	
 }

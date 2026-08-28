@@ -29,6 +29,7 @@ func main() {
 
 	router.Get("/clientes", handler.ListarTodosClientes,) 
 	router.Post("/clientes", handler.AddCliente,) 
+	router.Get("/clientes/{id}", handler.BuscarClientePorId,) 
 
 	log.Println(
         "Servidor executando em http://localhost:8081",

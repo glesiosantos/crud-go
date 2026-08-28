@@ -91,3 +91,20 @@ func (r Repository) CarregarClientePeloId(idCliente int) (Cliente, error){
 
 	return cliente, err
 }
+
+func (r *Repository) atualizarCliente(cliente Cliente) error {
+	sql := `
+		UDPATE clientes SET 
+		nome = $1 AND email = $2 AND telefone = $3
+	`
+
+	_, err := r.db.Excec(
+		context.Background(),
+		sql,
+		cliente.Nome,
+		cliente.Email,
+		cliente.Telefone
+	)
+
+	return errd
+}

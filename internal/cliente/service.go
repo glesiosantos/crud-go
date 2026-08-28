@@ -16,6 +16,10 @@ func (s *Service) ListarClientes() ([] Cliente, error) {
 	return s.repository.CarregarTodosClientes()
 }
 
+func(s * Service) BuscarClientePorId(clienteId int) (Cliente, error) {
+	return s.repository.CarregarClientePeloId(clienteId)
+}
+
 func(s *Service) CadastrarCliente(cliente Cliente) error {
 
 	if cliente.Nome == "" {
