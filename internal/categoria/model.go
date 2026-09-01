@@ -1,6 +1,6 @@
 
 
 type Categoria struct {
-	Id int
-	Nome string
+	Id int `json:"id"`
+	Nome string `json:"nome"`
 }

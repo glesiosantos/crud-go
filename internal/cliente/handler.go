@@ -104,7 +104,7 @@ func(h *Handler) BuscarClientePorId (
 
 func(h *Handler) EditarCliente(
 	response http.ResponseWriter, 
-	request *http.Request
+	request *http.Request,
 ) {
 	
 }

@@ -98,12 +98,12 @@ func (r *Repository) atualizarCliente(cliente Cliente) error {
 		nome = $1 AND email = $2 AND telefone = $3
 	`
 
-	_, err := r.db.Excec(
+	_, err := r.db.Exec(
 		context.Background(),
 		sql,
 		cliente.Nome,
 		cliente.Email,
-		cliente.Telefone
+		cliente.Telefone,
 	)
 
 	return err
