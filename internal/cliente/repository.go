@@ -106,5 +106,5 @@ func (r *Repository) atualizarCliente(cliente Cliente) error {
 		cliente.Telefone
 	)
 
-	return errd
+	return err
 }
