@@ -1,19 +1,21 @@
-package clientes
+package cliente
 
 import (
 	"context"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-type Cliente struct {
-	Id int
-	Nome string
-	Email string
-	Telefone string
+type Repository struct {
+	db *pgxpool.Pool
 }
 
-// Funcionalidades
-func CadastrarCliente(db *pgxpool.Pool, cliente Cliente) error {
+func NewRepository(db *pgxpool.Pool) *Repository {
+	return &Repository{
+		db: db,
+	}
+}
+
+func (r Repository) RegistrarCliente(cliente Cliente) error {
 
 	sql := `
 		INSERT INTO clientes
@@ -21,7 +23,7 @@ func CadastrarCliente(db *pgxpool.Pool, cliente Cliente) error {
 		VALUES ($1, $2, $3)
 		RETURNING id
 	`
-	_, err := db.Exec(
+	_, err := r.db.Exec(
 		context.Background(),
 		sql,
 		cliente.Nome,
@@ -32,13 +34,12 @@ func CadastrarCliente(db *pgxpool.Pool, cliente Cliente) error {
 	return err
 }
 
-func CarregarTodosClientes(db *pgxpool.Pool) ([]Cliente, error){
+func (r Repository) CarregarTodosClientes() ([]Cliente, error){
 	sql := `
 		SELECT id, nome, email, telefone
 		FROM clientes
 	`
-
-	linhas, err := db.Query(context.Background(), sql)
+	linhas, err := r.db.Query(context.Background(), sql)
 
 	if err != nil {
 		return nil, err
@@ -68,7 +69,7 @@ func CarregarTodosClientes(db *pgxpool.Pool) ([]Cliente, error){
 	return clientes, nil
 }
 
-func CarregarClientePeloId(db *pgxpool.Pool, idCliente int) (Cliente, error){
+func (r Repository) CarregarClientePeloId(idCliente int) (Cliente, error){
 	
 	var cliente Cliente
 	
@@ -77,7 +78,7 @@ func CarregarClientePeloId(db *pgxpool.Pool, idCliente int) (Cliente, error){
 		FROM clientes 
 		WHERE id = $1
 	`
-	err := db.QueryRow(
+	err := r.db.QueryRow(
 		context.Background(),
 		sql,
 		idCliente,
@@ -89,4 +90,21 @@ func CarregarClientePeloId(db *pgxpool.Pool, idCliente int) (Cliente, error){
 	)
 
 	return cliente, err
+}
+
+func (r *Repository) atualizarCliente(cliente Cliente) error {
+	sql := `
+		UDPATE clientes SET 
+		nome = $1 AND email = $2 AND telefone = $3
+	`
+
+	_, err := r.db.Exec(
+		context.Background(),
+		sql,
+		cliente.Nome,
+		cliente.Email,
+		cliente.Telefone,
+	)
+
+	return err
 }
