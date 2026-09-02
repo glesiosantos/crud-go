@@ -1,17 +1,19 @@
 package main
 
 import (
+	"context"
 	"log"
 	"github.com/joho/godotenv"
 	"os"
 	"github.com/go-chi/chi/v5"
 	"crud-go/internal/cliente"
 	"crud-go/infra/database"
+	"basico-crud-go/infra/keycloack"
 	"net/http"
 )
 
 func main() {
-
+	context := context.Background()
 	err := godotenv.Load()
 
 	if err != nil {
@@ -24,7 +26,7 @@ func main() {
 		log.Fatal("DATABASE_URL não foi definida")
 	}
 
-	db, err := database.NewPostgresPool(url)
+	db, err := database.NewPostgresPool(url, context)
 
 	if err != nil {
 		panic("Erro ao conectar")
@@ -32,6 +34,8 @@ func main() {
 	}
 
 	defer db.Close()
+
+	keycloak,err := keycloack.NewKeycloak(context)
 	router := chi.NewRouter()
 
 	cliente.NewRegisterModule(db, router)
