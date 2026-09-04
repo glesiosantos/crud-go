@@ -16,6 +16,10 @@ type UserClaims struct {
 	Name              string `json:"name"`
 }
 
+type RealmAccess struct {
+	Roles []string `json:"roles"`
+}
+
 type contextKey string
 
 const userContextKey contextKey = "user"
