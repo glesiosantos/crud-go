@@ -35,10 +35,10 @@ func main() {
 
 	defer db.Close()
 
-	keycloak,err := keycloack.NewKeycloak(context)
+	keycloakClient,err := keycloack.NewKeycloak(context)
 	router := chi.NewRouter()
 
-	cliente.NewRegisterModule(db, router)
+	cliente.NewRegisterModule(db, router, keycloakClient)
 	
 	log.Println(
         "Servidor executando em http://localhost:8082",
