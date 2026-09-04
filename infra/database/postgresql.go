@@ -6,8 +6,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func NewPostgresPool(databaseURL string) (*pgxpool.Pool, error) {
-	db, err := pgxpool.New(context.Background(), databaseURL)
+func NewPostgresPool(databaseURL string, context context.Context) (*pgxpool.Pool, error) {
+	db, err := pgxpool.New(context, databaseURL)
 	
 	if err != nil {
 		return nil, fmt.Errorf("erro ao criar pool de conexão: %w", err)
